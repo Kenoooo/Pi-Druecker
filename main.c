@@ -3,6 +3,7 @@
 #include <string.h>
 #include "mqtt.h"
 #include "stopwatch.h"
+#include "backup.h"
 
 int main (int argc, char* argv[]){
 	
@@ -25,6 +26,7 @@ int main (int argc, char* argv[]){
 			getchar();
 	        	getTime(&payload);
 			sendMessage(topic, payload);
+			writeBackup(payload);
 		}
 		//disconnectFromBroker();
 
