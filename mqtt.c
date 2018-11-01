@@ -41,20 +41,20 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *m
 
 void connlost(void *context, char *cause)
 {
-	
+
 	//char* currentTime;
 	//currentTime = (char *) malloc(20 * sizeof(char));
 	//getTime(&currentTime);
 	printf("\nConnection lost\n");
 	printf("	cause: %s\n", cause);
 	//printf("at Time: %s\n", currentTime);
-	
+
 	connectToBroker();
 }
 
 int instantiateClient(char* address){
 	int rc;
-	rc = MQTTClient_create(&client, address, CLIENTID, 
+	rc = MQTTClient_create(&client, address, CLIENTID,
 			MQTTCLIENT_PERSISTENCE_NONE, NULL);
 	MQTTClient_setCallbacks(client, NULL, connlost, msgarrvd, delivered);
 	return rc;
@@ -62,7 +62,7 @@ int instantiateClient(char* address){
 
 void connectToBroker(void){
 	int rc;
-	MQTTClient_connectOptions conn_opts = 
+	MQTTClient_connectOptions conn_opts =
 			MQTTClient_connectOptions_initializer;
 	conn_opts.keepAliveInterval = 20;
 	conn_opts.cleansession = 0;

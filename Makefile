@@ -1,5 +1,5 @@
 Main: main.o mqtt.o stopwatch.o backup.o
-	gcc -o Main main.o mqtt.o stopwatch.o backup.o -l paho-mqtt3cs
+	gcc -o Main main.o mqtt.o stopwatch.o backup.o -l paho-mqtt3cs -l wiringPi
 
 main.o: main.c
 	gcc -c main.c
