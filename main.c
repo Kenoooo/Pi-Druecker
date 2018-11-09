@@ -6,37 +6,32 @@
 #include "stopwatch.h"
 #include "backup.h"
 
-int main (int argc, char* argv[]){
+const char* brokerIP = "192.168.213.66:1883";
+const char* topic = "event/timer/start";
+
+int main (void){
 	
-	if(argc != 3){
-	}
-	else {
-		
-		char* address = argv[1];
-		char* topic = argv[2];
+	instantiateClient(brokerIP);
+	connectToBroker();
 
-		instantiateClient(address);
-		connectToBroker();
+	backupInit();
 
-		backupInit();
+	char* payload;
+	payload = (char *) malloc(20 * sizeof(char));
 
-		char* payload;
-		payload = (char *) malloc(20 * sizeof(char));
-		if(wiringPiSetup() == -1){
-			return 1;
-		}else{
-			pinMode(5, INPUT);
-		}
-		while(1){
-			if(digitalRead(5) == 1){
-				getchar();
-	        		getTime(&payload);
-				sendMessage(topic, payload);
-				writeBackup(payload);
-			}
+	int rc;
+	do{
+		rc = wiringPiSetup();
+	} while(rc == -1);
+	pinMode(5, INPUT);
+
+	while(1){
+		if(digitalRead(5) == 1){
+	       		getTime(&payload);
+			sendMessage(topic, payload);
+			writeBackup(payload);
 		}
 	}
 	
 	return 0;
-
 }
