@@ -18,6 +18,8 @@ int main (int argc, char* argv[]){
 		instantiateClient(address);
 		connectToBroker();
 
+		backupInit();
+
 		char* payload;
 		payload = (char *) malloc(20 * sizeof(char));
 		if(wiringPiSetup() == -1){
@@ -34,7 +36,7 @@ int main (int argc, char* argv[]){
 			}
 		}
 	}
-
+	
 	return 0;
 
 }
