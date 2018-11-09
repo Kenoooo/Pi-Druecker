@@ -3,7 +3,6 @@
 #include <string.h>
 #include "MQTTClient.h"
 #include "mqtt.h"
-//#include "stopwatch.h"
 
 #define CLIENTID	"Kontroll-PC"
 #define QOS		1
@@ -41,23 +40,19 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *m
 
 void connlost(void *context, char *cause)
 {
-
-	//char* currentTime;
-	//currentTime = (char *) malloc(20 * sizeof(char));
-	//getTime(&currentTime);
 	printf("\nConnection lost\n");
 	printf("	cause: %s\n", cause);
-	//printf("at Time: %s\n", currentTime);
 
 	connectToBroker();
 }
 
-int instantiateClient(char* address){
+void instantiateClient(char* address){
 	int rc;
-	rc = MQTTClient_create(&client, address, CLIENTID,
-			MQTTCLIENT_PERSISTENCE_NONE, NULL);
+	do{
+		rc = MQTTClient_create(&client, address, CLIENTID,
+				MQTTCLIENT_PERSISTENCE_NONE, NULL);
+	} while(rc != MQTTCLIENT_SUCCESS);
 	MQTTClient_setCallbacks(client, NULL, connlost, msgarrvd, delivered);
-	return rc;
 }
 
 void connectToBroker(void){
@@ -67,7 +62,7 @@ void connectToBroker(void){
 	conn_opts.keepAliveInterval = 20;
 	conn_opts.cleansession = 0;
 	do{
-	rc = MQTTClient_connect(client, &conn_opts);
+		rc = MQTTClient_connect(client, &conn_opts);
 	} while(rc != MQTTCLIENT_SUCCESS);
 }
 
@@ -84,13 +79,6 @@ void sendMessage(char* topic, char* payload){
 	printf("Current token: %d\n", token);
 	while(deliveredtoken != token);
 	printf("Delivered %s\n", payload);
-	/*if(deliveredtoken = token){
-		printf("Delivered %s\n", payload);
-		return 0;
-	} else{
-		printf("ERROR on delivery %s\n", payload);
-		return -1;
-	}*/
 }
 
 void disconnectFromBroker(void){
