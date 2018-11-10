@@ -8,7 +8,7 @@ void backupInit(void){
 
 	f = fopen("backupFile.txt", "w");
 
-	fprintf(f, "date and daytime, timestamp");
+	fprintf(f, "date and daytime, timestamp\n");
 
 	fclose(f);
 }

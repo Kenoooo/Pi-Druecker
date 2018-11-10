@@ -6,12 +6,13 @@
 #include "stopwatch.h"
 #include "backup.h"
 
-const char* brokerIP = "192.168.213.66:1883";
-const char* topic = "event/timer/start";
+/* Ändern  IP 192.168.213.66:1883 */
+#define brokerIP  "test.mosquitto.org:1883"
+#define topic  "event/timer/start"
 
 int main (void){
 	
-	instantiateClient(brokerIP);
+	instantiateClient((char*)brokerIP);
 	connectToBroker();
 
 	backupInit();
@@ -28,7 +29,7 @@ int main (void){
 	while(1){
 		if(digitalRead(5) == 1){
 	       		getTime(&payload);
-			sendMessage(topic, payload);
+			sendMessage((char*) topic, payload);
 			writeBackup(payload);
 		}
 	}
