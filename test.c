@@ -50,7 +50,8 @@ static void getDaytime_test(void **state){
 	time(&t);
 	daytime = localtime(&t);
 	sprintf(tTime, "%02d.%02d.%d %02d:%02d:%02d", daytime->tm_mday, daytime->tm_mon+1, daytime->tm_year+1900, daytime->tm_hour, daytime->tm_min, daytime->tm_sec);
-
+	
+	printf("[ Time     ] getDaytime %s", tTime);
 	assert_string_equal(tTime, gTime);
 
 	free(tTime);
