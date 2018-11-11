@@ -6,8 +6,8 @@
 #include "stopwatch.h"
 #include "backup.h"
 
-/* Ändern  IP 192.168.213.66:1883 */
-#define brokerIP  "test.mosquitto.org:1883"
+/* Ändern  IP  test.mosquitto.org:1883*/
+#define brokerIP  "192.168.213.66:1883"
 #define topic  "event/timer/start"
 
 int main (void){
