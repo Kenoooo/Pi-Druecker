@@ -33,6 +33,8 @@ int main (void){
 			writeBackup(payload);
 		}
 	}
+	disconnectFromBroker();
+	free(&payload);
 	
 	return 0;
 }

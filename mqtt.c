@@ -49,9 +49,11 @@ void connlost(void *context, char *cause)
 void instantiateClient(char* address){
 	int rc;
 	do{
+		printf("Trying to instantiate\n");
 		rc = MQTTClient_create(&client, address, CLIENTID,
 				MQTTCLIENT_PERSISTENCE_NONE, NULL);
 	} while(rc != MQTTCLIENT_SUCCESS);
+	printf("Instantiated MQTTClient\n");
 	MQTTClient_setCallbacks(client, NULL, connlost, msgarrvd, delivered);
 }
 
@@ -62,8 +64,10 @@ void connectToBroker(void){
 	conn_opts.keepAliveInterval = 20;
 	conn_opts.cleansession = 0;
 	do{
+		printf("Trying to connect\n");
 		rc = MQTTClient_connect(client, &conn_opts);
 	} while(rc != MQTTCLIENT_SUCCESS);
+	printf("Connected to Broker");
 }
 
 void sendMessage(char* topic, char* payload){
@@ -84,4 +88,5 @@ void sendMessage(char* topic, char* payload){
 void disconnectFromBroker(void){
 	MQTTClient_disconnect(client, TIMEOUT);
 	MQTTClient_destroy(&client);
+	printf("Disconnected from Broker and destroyed MQTTClient\n");
 }
