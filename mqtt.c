@@ -4,7 +4,7 @@
 #include "MQTTClient.h"
 #include "mqtt.h"
 
-#define CLIENTID	"Kontroll-PC"
+#define CLIENTID	"Raspberry Pi"
 #define QOS		1
 #define TIMEOUT		10000L
 
@@ -14,7 +14,7 @@ volatile MQTTClient_deliveryToken deliveredtoken;
 
 void delivered(void *context, MQTTClient_deliveryToken dt)
 {
-	printf("Message with token value %d delivery confirmed\n", dt);
+	//printf("Message with token value %d delivery confirmed\n", dt);
 	deliveredtoken = dt;
 }
 
@@ -23,9 +23,9 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *m
 	int i;
 	char* payloadptr;
 
-	printf("Message arrived\n");
-	printf("	topic: %s\n", topicName);
-	printf("	message: ");
+	//printf("Message arrived\n");
+	//printf("	topic: %s\n", topicName);
+	//printf("	message: ");
 
 	payloadptr = message->payload;
 	for(i=0; i<message->payloadlen; i++)
@@ -40,8 +40,8 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *m
 
 void connlost(void *context, char *cause)
 {
-	printf("\nConnection lost\n");
-	printf("	cause: %s\n", cause);
+	//printf("\nConnection lost\n");
+	//printf("	cause: %s\n", cause);
 
 	connectToBroker();
 }
@@ -49,11 +49,11 @@ void connlost(void *context, char *cause)
 void instantiateClient(char* address){
 	int rc;
 	do{
-		printf("Trying to instantiate\n");
+		//printf("Trying to instantiate\n");
 		rc = MQTTClient_create(&client, address, CLIENTID,
 				MQTTCLIENT_PERSISTENCE_NONE, NULL);
 	} while(rc != MQTTCLIENT_SUCCESS);
-	printf("Instantiated MQTTClient\n");
+	//printf("Instantiated MQTTClient\n");
 	MQTTClient_setCallbacks(client, NULL, connlost, msgarrvd, delivered);
 }
 
@@ -64,10 +64,10 @@ void connectToBroker(void){
 	conn_opts.keepAliveInterval = 20;
 	conn_opts.cleansession = 0;
 	do{
-		printf("Trying to connect\n");
+		//printf("Trying to connect\n");
 		rc = MQTTClient_connect(client, &conn_opts);
 	} while(rc != MQTTCLIENT_SUCCESS);
-	printf("Connected to Broker");
+	//printf("Connected to Broker");
 }
 
 void sendMessage(char* topic, char* payload){
@@ -80,13 +80,13 @@ void sendMessage(char* topic, char* payload){
 	pubmsg.retained = 0;
 	deliveredtoken = 0;
 	MQTTClient_publishMessage(client, topic, &pubmsg, &token);
-	printf("Current token: %d\n", token);
+	//printf("Current token: %d\n", token);
 	while(deliveredtoken != token);
-	printf("Delivered %s\n", payload);
+	//printf("Delivered %s\n", payload);
 }
 
 void disconnectFromBroker(void){
 	MQTTClient_disconnect(client, TIMEOUT);
 	MQTTClient_destroy(&client);
-	printf("Disconnected from Broker and destroyed MQTTClient\n");
+	//printf("Disconnected from Broker and destroyed MQTTClient\n");
 }
