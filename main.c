@@ -9,7 +9,7 @@
 #define BROKERIP "192.168.213.66:1883"
 #define TOPIC "event/timer/start"
 
-#define DEBOUNCETIME 15
+#define DEBOUNCETIME 1500
 
 int main (void){
 	
@@ -30,6 +30,7 @@ int main (void){
 	int buttonPressed = 0;
 	while(1){
 		if(digitalRead(5) == 1){
+			//printf("%d\n", buttonPressed);
 			buttonPressed++;
 		}else{
 			buttonPressed = 0;
