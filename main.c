@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <wiringPi.h>
 #include "mqtt.h"
 #include "stopwatch.h"
@@ -9,7 +10,7 @@
 #define BROKERIP "192.168.213.66:1883"
 #define TOPIC "event/timer/start"
 
-#define DEBOUNCETIME 1500
+#define DEBOUNCETIME 7500
 
 int main (void){
 	
@@ -39,6 +40,7 @@ int main (void){
 			getTime(&payload);
 			sendMessage((char*)TOPIC, payload);
 			writeBackup(payload);
+			sleep(5);
 		}
 	}
 	disconnectFromBroker();
