@@ -35,3 +35,20 @@ void getDaytime(char** returnValue){
 
 	free(str);
 }
+
+void getDate(char** returnValue){
+
+	time_t rawtime;
+	struct tm* timeinfo;
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+
+	char* str;
+	str = (char *) malloc(10 * sizeof(char));
+	sprintf(str, "%02d.%02d", timeinfo->tm_mday, timeinfo->tm_mon+1);
+
+	strcpy(*returnValue, str);
+
+	free(str);
+}
