@@ -4,6 +4,8 @@
 #include "backup.h"
 #include "stopwatch.h"
 
+char* backupname;
+
 void backupInit(void){
 	FILE* f;
 
@@ -11,8 +13,9 @@ void backupInit(void){
 	getDate(&date);
 
 	strcat(date, ".txt");
+	backupname = date;
 
-	f = fopen(date, "a+");
+	f = fopen(backupname, "a+");
 
 	fprintf(f, "date and daytime, timestamp\n");
 
@@ -22,7 +25,7 @@ void backupInit(void){
 void writeBackup(char* backup){
 	FILE* f;
 
-	f = fopen("backupFile.txt", "a+");
+	f = fopen(backupname, "a+");
 
 	char* daytime = (char *) malloc(32 * sizeof(char));
 	getDaytime(&daytime);
