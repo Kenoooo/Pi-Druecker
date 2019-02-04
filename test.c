@@ -7,7 +7,14 @@
 #include <time.h>
 #include "stopwatch.c"
 #include "backup.c"
-
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <sys/wait.h>
+#include <fcntl.h>
+#include <mqtt.h>
 
 static long timestamp(){
 
@@ -101,8 +108,38 @@ static void backupFile_test(void **state){
 	fclose(f1);
 	fclose(f2);
 }
+/* ToDo
+const char* addr = "test.mosquitto.org";
+const char* port = "1883";
 
+static void mqtt_publish_test(void** state) {
+    uint8_t buf[256];
+    ssize_t rv;
+    const uint8_t correct_bytes[] = {
+        (MQTT_CONTROL_PUBLISH << 4) | MQTT_PUBLISH_RETAIN, 18,
+        0, 6, 't', 'o', 'p', 'i', 'c', '1',
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+    };
+    struct mqtt_response mqtt_response;
+    struct mqtt_response_publish *response;
+    response = &(mqtt_response.decoded.publish);
+    
+    
+    rv = msgarrvd(buf, 256, "topic1", 23, "0123456789", 10, MQTT_PUBLISH_RETAIN);
+    assert_true(rv == 20);
+    assert_true(memcmp(buf, correct_bytes, 20) == 0);
 
+    assert_true(rv == 2);
+    rv = mqtt_pack_publish_response(&mqtt_response, buf + 2);
+    assert_true(response->qos_level == 0);
+    assert_true(response->retain_flag == 1);
+    assert_true(response->dup_flag == 0);
+    assert_true(response->topic_name_size == 6);
+    assert_true(memcmp(response->topic_name, "topic1", 6) == 0);
+    assert_true(response->application_message_size == 10);
+    assert_true(memcmp(response->application_message, "0123456789", 10) == 0);
+}
+*/
 int main(void){
 
 	printf("\nCheck timestamp!!!\n\n");
@@ -110,6 +147,7 @@ int main(void){
 		cmocka_unit_test(getTime_test),
 		cmocka_unit_test(getDaytime_test),
 		cmocka_unit_test(backupFile_test),
+		cmocka_unit_test(mqtt_publish_test)
 	};
 	return cmocka_run_group_tests(tests, NULL, NULL);
 }
